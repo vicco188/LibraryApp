@@ -1,5 +1,4 @@
 ﻿using Infrastructure.Contexts;
-using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 using System.Diagnostics;
 using System.Linq.Expressions;
 
@@ -92,6 +91,30 @@ public abstract class BaseRepository<TEntity> where TEntity : class
 		catch (Exception ex)
 		{
 			Debug.Write("Error in method Update: " + ex.Message);
+		}
+		return null!;
+	}
+
+	/// <summary>
+	/// Deletes first entry that fits a query expression from database
+	/// </summary>
+	/// <param name="expression">Query expression</param>
+	/// <returns>The entity that was deleted from database if successful, otherwise null</returns>
+	public virtual TEntity Delete(Expression<Func<TEntity, bool>> expression)
+	{
+		try
+		{
+			var entity = _context.Set<TEntity>().FirstOrDefault(expression);
+			if(entity != null)
+			{
+				_context.Remove(entity);
+				_context.SaveChanges();
+				return entity;
+			}
+		}
+		catch (Exception ex)
+		{
+			Debug.Write("Error in method Delete: " + ex.Message);
 		}
 		return null!;
 	}

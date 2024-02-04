@@ -2,7 +2,6 @@
 using Infrastructure.Entities;
 using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
-using Xunit;
 
 namespace Infrastructure.Test.Repositories;
 
@@ -13,7 +12,7 @@ public class BaseRepository_Tests
 		.Options);
 
 	[Fact]
-	public void Create_ShouldCreateEntity_AndReturnCompleteEntity()
+	public void Create_ShouldCreateEntry_AndReturnCompleteEntity()
 	{
 		// Arrange
 		var repo = new GenreRepository(context);
@@ -26,7 +25,7 @@ public class BaseRepository_Tests
 	}
 
 	[Fact]
-	public void Create_ShouldCreateSecondEntity_AndReturnCompleteEntity()
+	public void Create_ShouldCreateSecondEntry_AndReturnCompleteEntity()
 	{
 		// Arrange
 		var repo = new GenreRepository(context);
@@ -43,7 +42,7 @@ public class BaseRepository_Tests
 	}
 
 	[Fact]
-	public void Create_ShouldReturnNull_IfEntityAlreadeExists()
+	public void Create_ShouldReturnNull_IfEntryAlreadyExists()
 	{
 		// Arrange
 		var repo = new GenreRepository(context);
@@ -56,7 +55,7 @@ public class BaseRepository_Tests
 	}
 
 	[Fact]
-	public void Read_ShouldReturnEntity_IfEntityExists()
+	public void Read_ShouldReturnEntity_IfEntryExists()
 	{
 		// Arrange
 		var repo = new GenreRepository(context);
@@ -96,7 +95,7 @@ public class BaseRepository_Tests
 	}
 
 	[Fact]
-	public void ReadAll_ShouldReturnList_WithAllEntities()
+	public void ReadAll_ShouldReturnList_WithAllEntries()
 	{
 		// Arrange
 		var repo = new GenreRepository(context);
@@ -110,7 +109,7 @@ public class BaseRepository_Tests
 	}
 
 	[Fact]
-	public void Update_ShouldUpdateInDbAndReturnUpdatedEntity_IfEntityExists()
+	public void Update_ShouldUpdateInDbAndReturnUpdatedEntity_IfEntryExists()
 	{
 		// Arrange
 		var repo = new GenreRepository(context);
@@ -125,5 +124,49 @@ public class BaseRepository_Tests
 		Assert.Equal("Test name 2", repo.Read(e => e.Id == 1).Name);
 	}
 
+	[Fact]
+	public void Update_ShoudNotUpdateInDbReturnNull_IfEntryDoesNotExist()
+	{
+		// Arrange
+		var repo = new GenreRepository(context);
+		repo.Create(new GenreEntity { Name = "Test name 1" });
+		var entityToUpdate = repo.Read(e => e.Id == 1);
+		entityToUpdate.Name = "Test name 2";
+		// Act
+		var result = repo.Update(e => e.Id == 2, entityToUpdate);
+		// Assert
+		Assert.Null(result);
+	}
+
+	[Fact]
+	public void Delete_ShouldDeleteInDbAndReturnEntity_IfEntryExists()
+	{
+		// Arrange
+		var repo = new GenreRepository(context);
+		repo.Create(new GenreEntity { Name = "Test name 1" });
+		repo.Create(new GenreEntity { Name = "Test name 2" });
+		// Act
+		var result = repo.Delete(e => e.Id == 1);
+		var allEntries = repo.ReadAll();
+		// Assert
+		Assert.Equal(1, result.Id);
+		Assert.Single(allEntries);
+		Assert.Equal(2, allEntries.First().Id);
+	}
+
+	[Fact]
+	public void Delete_ShouldNotChangeDbAndReturnNull_IfEntryDoesNotExist()
+	{
+		// Arrange
+		var repo = new GenreRepository(context);
+		repo.Create(new GenreEntity { Name = "Test name 1" });
+		// Act
+		var result = repo.Delete(e => e.Id == 2);
+		var allEntries = repo.ReadAll();
+		// Assert
+		Assert.Null(result);
+		Assert.Single(allEntries);
+		Assert.Equal(1, allEntries.First().Id);
+	}
 
 }

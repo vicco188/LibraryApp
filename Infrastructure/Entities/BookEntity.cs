@@ -15,6 +15,8 @@ public class BookEntity
 	[Required]
 	[ForeignKey(nameof(AuthorEntity))]
 	public int AuthorId { get; set; }
+	 
+
 
 	[Required]
 	[ForeignKey(nameof(PublisherEntity))]

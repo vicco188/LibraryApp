@@ -12,3 +12,5 @@ public class GenreRepository : BaseRepository<GenreEntity>
 		_context = context;
 	}
 }
+
+

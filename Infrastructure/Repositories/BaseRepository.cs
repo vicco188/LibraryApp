@@ -1,4 +1,5 @@
 ﻿using Infrastructure.Contexts;
+using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 using System.Diagnostics;
 using System.Linq.Expressions;
 
@@ -51,7 +52,48 @@ public abstract class BaseRepository<TEntity> where TEntity : class
 		}
 
 		return null!;
+	}
 
+	/// <summary>
+	/// Reads all entities from database
+	/// </summary>
+	/// <returns>A IEnumerable with all entities</returns>
+	public virtual IEnumerable<TEntity> ReadAll()
+	{
+		try
+		{
+			return _context.Set<TEntity>().ToList();
+		}
+		catch (Exception ex)
+		{
+			Debug.Write("Error in method ReadAll: " + ex.Message);
+		}
+		return null!;
+	}
+
+	/// <summary>
+	/// Updates first entity that fits a query expression to the values in a provided entity
+	/// </summary>
+	/// <param name="expression">The query expression of the entity to update</param>
+	/// <param name="updatedEntity"></param>
+	/// <returns>The updated entity if the entity is found and updated, otherwise null</returns>
+	public virtual TEntity Update(Expression<Func<TEntity, bool>> expression, TEntity updatedEntity) 
+	{
+		try
+		{
+			var entityToUpdate = _context.Set<TEntity>().FirstOrDefault(expression);
+			if (entityToUpdate != null)
+			{
+				_context.Entry(entityToUpdate).CurrentValues.SetValues(updatedEntity);
+				_context.SaveChanges();
+				return entityToUpdate;
+			}
+		}
+		catch (Exception ex)
+		{
+			Debug.Write("Error in method Update: " + ex.Message);
+		}
+		return null!;
 	}
 
 }

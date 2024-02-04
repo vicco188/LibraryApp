@@ -3,11 +3,11 @@ using Infrastructure.Entities;
 
 namespace Infrastructure.Repositories;
 
-public class GenreRepository : BaseRepository<GenreEntity>
+public class CustomerRepository : BaseRepository<CustomerEntity>
 {
 	private readonly LibDbContext _context;
 
-	public GenreRepository(LibDbContext context) : base(context)
+	public CustomerRepository(LibDbContext context) : base(context)
 	{
 		_context = context;
 	}

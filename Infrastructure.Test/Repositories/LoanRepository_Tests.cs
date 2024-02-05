@@ -184,8 +184,4 @@ public class LoanRepository_Tests
 		Assert.IsAssignableFrom<IEnumerable<LoanEntity>>(result);
 		Assert.Empty(result);
 	}
-
-
-
-
 }

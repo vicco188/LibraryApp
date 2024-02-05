@@ -40,7 +40,6 @@ public class BookRepository_Tests
 		Assert.Equal(1, result2.Id);
 		Assert.Equal(1, result3.LanguageId);
 		Assert.Null(result4);
-
 	}
 
 	[Fact]

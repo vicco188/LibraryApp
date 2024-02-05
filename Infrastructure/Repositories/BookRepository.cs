@@ -38,8 +38,6 @@ public class BookRepository : BaseRepository<BookEntity>
 			Debug.Write("Error in method BookRepository.Read: " + ex.Message);
 		}
 		return null!;
-
-
 	}
 
 

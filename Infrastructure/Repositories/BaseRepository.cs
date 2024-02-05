@@ -119,4 +119,24 @@ public abstract class BaseRepository<TEntity> where TEntity : class
 		return null!;
 	}
 
+	/// <summary>
+	/// Checks wether an entry that satisfies a query expression exists in database
+	/// </summary>
+	/// <param name="expression">The expression to look for</param>
+	/// <returns>True if entry exists, otherwise false</returns>
+	public virtual bool Exists(Expression<Func<TEntity, bool>> expression)
+	{
+		try
+		{
+			var result = _context.Set<TEntity>().FirstOrDefault(expression);
+			if (result != null)
+				return true;
+		}
+		catch (Exception ex)
+		{
+			Debug.Write("Error in method Exits: " + ex.Message);
+		}
+		return false;
+	}
+
 }

@@ -169,4 +169,22 @@ public class BaseRepository_Tests
 		Assert.Equal(1, allEntries.First().Id);
 	}
 
+	[Fact]
+	public void Exists_ShouldReturnTrueIfEntryExists_ShouldReturnFalseIfEntryDoesNotExist()
+	{
+		// Arrange
+		var repo = new GenreRepository(context);
+		repo.Create(new GenreEntity { Name = "Test name" });
+		// Act
+		var result1a = repo.Exists(e => e.Id == 1);
+		var result1b = repo.Exists(e => e.Name == "Test name");
+		var result2a = repo.Exists(e => e.Id == 2);
+		var result2b = repo.Exists(e => e.Name == "Test name 2");
+		// Assert
+		Assert.True(result1a);
+		Assert.True(result1b);
+		Assert.False(result2a);
+		Assert.False(result2b);
+	}
+
 }

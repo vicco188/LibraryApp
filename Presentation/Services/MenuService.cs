@@ -24,6 +24,7 @@ public class MenuService(BookService bookService, CustomerService customerServic
 			switch (response)
 			{
 				case 1: HandleCustomersMenu(); break;
+				case 2: HandleBooksMenu(); break;
 			}
 		} while (response != 9);
 	}
@@ -71,9 +72,39 @@ public class MenuService(BookService bookService, CustomerService customerServic
 		} while (response != 9);
 	}
 	private void AddBookUi()
-		{
+	{
+		Console.Clear();
+		Console.WriteLine("Lägg till bok \n=============");
 
+		Console.Write("Ange titel: ");
+		string title = Console.ReadLine()!;
+		Console.Write("Ange författares förnamn: ");
+		string authorFirstName = Console.ReadLine()!;
+		Console.Write("Ange författares förnamn: ");
+		string authorLastName = Console.ReadLine()!; ;
+		Console.Write("Ange förlag: ");
+		string publisher = Console.ReadLine()!;
+		Console.Write("Ange språk: ");
+		string language = Console.ReadLine()!;
+		Console.Write("Ange kategori: ");
+		string genre = Console.ReadLine()!;
+
+		try
+		{
+			var result = _bookService.CreateBook(title, authorFirstName, authorLastName, publisher, genre, language);
+			Console.Clear();
+			if (result != null)
+				Console.WriteLine($"Boken skapades. Bokens id är {result.Id}");
+			else
+				Console.WriteLine("Något gick fel.");
 		}
+		catch (Exception ex)
+		{
+			Console.WriteLine($"Något gick fel. Felkod {ex}: {ex.Message}");
+		}
+		GetKey();
+
+	}
 	private void GetBookUi()
 	{
 		throw new NotImplementedException();

@@ -22,4 +22,5 @@ var builder = Host.CreateDefaultBuilder().ConfigureServices(services =>
 }).Build();
 
 var menuService = builder.Services.GetRequiredService<MenuService>();
-menuService.AddCustomer();
+
+menuService.MainMenu();

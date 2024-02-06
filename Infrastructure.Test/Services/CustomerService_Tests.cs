@@ -39,4 +39,92 @@ public class CustomerService_Tests
 		Assert.Null(result);
 	}
 
+	[Fact]
+	public void GetCustomer_ShouldReturnCustomerIfCustomerExists_OtherwiseReturnNull()
+	{
+		// Arrange
+		var customerRepository = new CustomerRepository(context);
+		var customerService = new CustomerService(customerRepository);
+		customerService.CreateCustomer(new CustomerEntity { FirstName = "Test", LastName = "Test", Email = "test@test.com" });
+		// Act
+		var result1 = customerService.GetCustomer(1);
+		var result2 = customerService.GetCustomer(2);
+		// Assert
+		Assert.IsType<CustomerEntity>(result1);
+		Assert.Equal(1, result1.Id);
+		Assert.Null(result2);
+	}
+
+	[Fact]
+	public void GetAllCustomers_ShouldReturnListOfCutsomers() 
+	{
+		// Arrange
+		var customerRepository = new CustomerRepository(context);
+		var customerService = new CustomerService(customerRepository);
+		customerService.CreateCustomer(new CustomerEntity { FirstName = "Test", LastName = "Test", Email = "test@test.com" });
+		// Act
+		var result = customerService.GetAllCustomers();
+		// Assert
+		Assert.Single(result);
+		Assert.IsAssignableFrom<IEnumerable<CustomerEntity>>(result);
+	}
+
+	[Fact]
+	public void GetAllCustomers_ShouldReturnEmptyListOfCutsomers_IfNoCustomersInDb()
+	{
+		// Arrange
+		var customerRepository = new CustomerRepository(context);
+		var customerService = new CustomerService(customerRepository);
+		// Act
+		var result = customerService.GetAllCustomers();
+		// Assert
+		Assert.Empty(result);
+		Assert.IsAssignableFrom<IEnumerable<CustomerEntity>>(result);
+	}
+
+	[Fact]
+	public void DeleteCustomer_ShouldDeleteCustomerThenReturnEntity_OrReturnNullIfCustomerDoesNotExist()
+	{
+		// Arrange
+		var customerRepository = new CustomerRepository(context);
+		var customerService = new CustomerService(customerRepository);
+		customerService.CreateCustomer(new CustomerEntity { FirstName = "Test", LastName = "Test", Email = "test@test.com" });
+		// Act
+		var result1 = customerService.DeleteCustomer(1);
+		var result2 = customerService.DeleteCustomer(2);
+		var result3 = customerService.GetAllCustomers();
+		// Assert
+		Assert.Equal(1, result1.Id);
+		Assert.Null(result2);
+		Assert.Empty(result3);
+	}
+	[Fact]
+	public void UpdateCustomer_ShouldUpdateCustomer_AndReturnCustomerEntity()
+	{
+		// Arrange
+		var customerRepository = new CustomerRepository(context);
+		var customerService = new CustomerService(customerRepository);
+		var customer = customerService.CreateCustomer(new CustomerEntity { FirstName = "Test", LastName = "Test", Email = "test@test.com" });
+		
+		customer.FirstName = "Test2";
+		// Act
+		var result = customerService.UpdateCustomer(customer);
+		var result2 = customerService.GetCustomer(1);
+		// Assert
+		Assert.Equal("Test2", result.FirstName);
+		Assert.Equal("Test2", result2.FirstName);
+
+	}
+
+	[Fact]
+	public void UpdateCustomer_ShoudReturnNull_IfCustomerDoesNotExist()
+	{
+		// Arrange
+		var customerRepository = new CustomerRepository(context);
+		var customerService = new CustomerService(customerRepository);
+		// Act
+		var result = customerService.UpdateCustomer(new CustomerEntity { FirstName = "Test", LastName = "Test", Email = "test@test.com" });
+		// Assert
+		Assert.Null(result);
+	}
 }

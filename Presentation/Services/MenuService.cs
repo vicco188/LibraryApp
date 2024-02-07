@@ -327,7 +327,7 @@ public class MenuService(BookService bookService, CustomerService customerServic
 				Console.WriteLine($"Antal lån: {customer.Loans.Count()}");
 				foreach (var loan in customer.Loans)
 				{
-					Console.WriteLine($"{loan.Book.Author.LastName}, {loan.Book.Author.FirstName} - {loan.Book.Title}");
+					Console.WriteLine($"Lånenummer {loan.LoanNumber} | {loan.Book.Author.ToString()} - {loan.Book.Title}");
 				}
 			}
 			else
@@ -490,7 +490,7 @@ public class MenuService(BookService bookService, CustomerService customerServic
 	{
 		Console.Clear();
 		Console.WriteLine("Återlämna bok \n=============");
-		Console.WriteLine("Ange boknummer: ");
+		Console.Write("Ange boknummer: ");
 		try
 		{
 			int bookId = int.Parse(Console.ReadLine()!);

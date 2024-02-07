@@ -17,4 +17,9 @@ public class AuthorEntity
 	public string LastName { get; set; } = null!;
 
 	public virtual ICollection<BookEntity> Books { get; set; } = new List<BookEntity>();
+
+	public override string ToString()
+	{
+		return $"{LastName}, {FirstName}";
+	}
 }

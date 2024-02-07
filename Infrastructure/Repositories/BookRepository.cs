@@ -30,6 +30,7 @@ public class BookRepository : BaseRepository<BookEntity>
 				.Include(e => e.Genre)
 				.Include(e => e.Language)
 				.Include(e => e.Loan)
+				.ThenInclude(loan => loan!.Customer)
 				.FirstOrDefault(expression);
 			if (entity != null)
 				return entity;
@@ -56,6 +57,7 @@ public class BookRepository : BaseRepository<BookEntity>
 				.Include(e => e.Genre)
 				.Include(e => e.Language)
 				.Include(e => e.Loan)
+				.ThenInclude(loan => loan!.Customer)
 				.ToList();
 		}
 		catch (Exception ex)

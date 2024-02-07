@@ -31,4 +31,24 @@ public class LoanService(LoanRepository loanRepository)
 
 
 	}
+
+	public LoanEntity GetLoan(int bookId)
+	{
+		try
+		{
+			return _loanRepository.Read(l => l.BookId == bookId);
+		}
+		catch (Exception ex) { Debug.Write("Error in method GetLoan : " + ex.Message); }
+		return null!;
+	}
+
+	public IEnumerable<LoanEntity> GetAllLoans()
+	{
+		try
+		{
+			return _loanRepository.ReadAll();
+		}
+		catch (Exception ex) { Debug.Write("Error in method GetAllLoans : " + ex.Message); }
+		return null!;
+	}
 }

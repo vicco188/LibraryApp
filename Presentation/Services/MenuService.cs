@@ -449,7 +449,7 @@ public class MenuService(BookService bookService, CustomerService customerServic
 	private void AddLoanUi()
 	{
 		Console.Clear();
-		Console.WriteLine("Låna bok \n=============");
+		Console.WriteLine("Låna bok \n========");
 		try
 		{
 			Console.Write("Ange kundnummer: ");
@@ -488,10 +488,44 @@ public class MenuService(BookService bookService, CustomerService customerServic
 	}
 	private void DeleteLoanUi()
 	{
-		throw new NotImplementedException();
+		Console.Clear();
+		Console.WriteLine("Återlämna bok \n=============");
+		Console.WriteLine("Ange boknummer: ");
+		try
+		{
+			int bookId = int.Parse(Console.ReadLine()!);
+			var loan = _loanService.GetLoan(bookId);
+			Console.Clear();
+			if (loan == null)
+			{
+				Console.WriteLine("Boken är inte utlånad");
+				GetKey();
+				return;
+			}
+			var result = _loanService.DeleteLoan(bookId);
+			Console.Clear();
+			if (result != null) Console.WriteLine($"{result.Book.Title} är nu återlämnad.");
+			else Console.WriteLine("Något gick tyvärr fel. ");
+		}
+		catch (Exception ex) { Console.WriteLine($"Något gick fel. Felkod {ex}: {ex.Message}"); }
+		GetKey();
 	}
 	private void GetAllLoansUi()
 	{
-		throw new NotImplementedException();
+		try
+		{
+			IEnumerable<LoanEntity> loanList = _loanService.GetAllLoans();
+			Console.Clear();
+			Console.WriteLine("Lista över lån\n==============");
+			foreach (var loan in loanList)
+			{
+				Console.WriteLine($"Lånenummer {loan.LoanNumber} | Bok {loan.BookId} [{loan.Book.Author.LastName}, {loan.Book.Author.FirstName} - {loan.Book.Title}] är utlånad till kund {loan.CustomerId} [{loan.Customer.FirstName} {loan.Customer.LastName}]");
+			}
+		}
+		catch (Exception ex)
+		{
+			Console.WriteLine($"Något gick fel. Felkod {ex}: {ex.Message}");
+		}
+		GetKey();
 	}
 }

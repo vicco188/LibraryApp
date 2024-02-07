@@ -18,7 +18,7 @@ public class MenuService(BookService bookService, CustomerService customerServic
 			Console.Clear();
 			Console.WriteLine("BIBLIOTEKSDATABAS\n\n");
 			Console.WriteLine("Huvudmeny\n=========");
-			Console.WriteLine("1. Hantera bibliotekskunder\n2. Hantera Böcker\n3. Hantera lån\n4. Hantera produkter\n9. Avsluta");
+			Console.WriteLine("1. Hantera bibliotekskunder\n2. Hantera böcker\n3. Hantera lån\n4. Hantera produkter\n9. Avsluta");
 			Console.Write("Val: ");
 			int.TryParse(Console.ReadLine()!, out response);
 			switch (response)
@@ -107,20 +107,144 @@ public class MenuService(BookService bookService, CustomerService customerServic
 	}
 	private void GetBookUi()
 	{
-		throw new NotImplementedException();
+		Console.Clear();
+		Console.WriteLine("Visa bok\n========");
+		Console.Write("Ange boknummer: ");
+
+
+		try
+		{
+			int bookId = int.Parse(Console.ReadLine()!);
+			var book = _bookService.GetBook(bookId);
+			Console.Clear();
+			if (book != null)
+			{
+				Console.WriteLine("Bokuppgifter \n============");
+				Console.WriteLine($"Boknummer: {book.Id}");
+				Console.WriteLine($"Titel: {book.Title}");
+				Console.WriteLine($"Författare: {book.Author.LastName}, {book.Author.FirstName}");
+				Console.WriteLine($"Förlag: {book.Publisher.Name}");
+				Console.WriteLine($"Kategori: {book.Genre.Name}");
+				Console.WriteLine($"Språk: {book.Language.Name}");
+				if (book.Loan != null) Console.WriteLine($"Boken är utlånad till {book.Loan.Customer.FirstName} {book.Loan.Customer.LastName} (kundnummer {book.Loan.CustomerId})");
+				else Console.WriteLine("Boken är inte utlånad.");
+
+			}
+			else
+			{
+				Console.WriteLine("Bpken hittades inte. ");
+			}
+		}
+		catch (Exception ex)
+		{
+			Console.WriteLine($"Något gick fel. Felkod {ex}: {ex.Message}");
+		}
+
+		GetKey();
 	}
 	private void GetAllBookUi()
 		{
-			throw new NotImplementedException();
+		try
+		{
+			var bookList = _bookService.GetAllBooks();
+			Console.Clear();
+			Console.WriteLine("Boklista\n========");
+			foreach (var book in bookList)
+			{
+				Console.Write($"Boknummer {book.Id} | {book.Author.LastName}, {book.Author.FirstName} - {book.Title} ");
+				if (book.Loan != null) Console.Write($"(utlånad till kundnummer {book.Loan.CustomerId})\n");
+				else Console.Write("(ej utlånad)\n");
+			}
 		}
+		catch (Exception ex)
+		{
+			Console.WriteLine($"Något gick fel. Felkod {ex}: {ex.Message}");
+		}
+		GetKey();
+	}
 	private void UpdateBookUi()
 	{
-		throw new NotImplementedException();
+		try
+		{
+			Console.Clear();
+			Console.WriteLine("Uppdatera bokuppgifter\n=======================");
+			Console.Write("Ange boknummer att uppdatera: ");
+			int bookId = int.Parse(Console.ReadLine()!);
+			var bookEntity = _bookService.GetBook(bookId);
+			Console.Clear();
+			if (bookEntity == null)
+			{
+				Console.WriteLine("Boken hittades inte");
+				GetKey();
+				return;
+			}
+			Console.Write($"Ange title (befintlig titel: {bookEntity.Title}): ");
+			var title = Console.ReadLine()!;
+			Console.Write($"Ange författares förnamn (befintligt förnamn: {bookEntity.Author.FirstName}): ");
+			var firstName = Console.ReadLine()!;
+			Console.Write($"Ange författares efternamn (befintligt efternamn: {bookEntity.Author.LastName}): ");
+			var lastName = Console.ReadLine()!;
+			Console.Write($"Ange kategori (befintlig kategori: {bookEntity.Genre.Name}): ");
+			var genre = Console.ReadLine()!;
+			Console.Write($"Ange förlag (befintligt förlag: {bookEntity.Publisher.Name}): ");
+			var publisher = Console.ReadLine()!;
+			Console.Write($"Ange språk (befintligt språk: {bookEntity.Language.Name}): ");
+			var language = Console.ReadLine()!;
+			Console.Write("Bekräfta uppdatering (y/n): ");
+			var response = Console.ReadLine();
+			if (response != "y")
+			{
+				Console.WriteLine("Åtgärden avbruten");
+				GetKey();
+				return;
+			}
+
+			var result = _bookService.UpdateBook(bookEntity, title, firstName, lastName, publisher, genre, language);
+			Console.Clear();
+			if (result != null) Console.WriteLine("Boken uppdaterades");
+			else Console.WriteLine("Något gick tyvärr fel");
+		}
+		catch (Exception ex)
+		{
+			Console.WriteLine($"Något gick fel. Felkod {ex}: {ex.Message}");
+		}
+		GetKey();
 	}
 
 	private void DeleteBookUi()
 	{
-		throw new NotImplementedException();
+		Console.Clear();
+		Console.WriteLine("Ta bort bok\n===========");
+		try
+		{
+			Console.Write("Ange boknummer: ");
+			int bookId = int.Parse(Console.ReadLine()!);
+			var book = _bookService.GetBook(bookId);
+			Console.Clear();
+			if (book == null)
+			{
+				Console.WriteLine("Boken hittades inte.");
+				GetKey();
+				return;
+			}
+			Console.Write($"Bekräfta borttagning av bok {bookId} [{book.Author.LastName}, {book.Author.FirstName} -  {book.Title}] (y/n): ");
+			var response = Console.ReadLine();
+			if (response != "y")
+				return;
+
+			var result = _bookService.DeleteBook(bookId);
+			Console.Clear();
+			if (result != null)
+				Console.WriteLine("Boken är borttagen");
+			else
+				Console.WriteLine("Något gick tyvärr fel.");
+		}
+		catch (Exception ex)
+		{
+			Console.WriteLine($"Något gick fel. Felkod {ex}: {ex.Message}");
+		}
+
+		GetKey();
 	}
 
 	

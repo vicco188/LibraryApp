@@ -56,7 +56,7 @@ public class CustomerService_Tests
 	}
 
 	[Fact]
-	public void GetAllCustomers_ShouldReturnListOfCutsomers() 
+	public void GetAllCustomers_ShouldReturnListOfCustomers() 
 	{
 		// Arrange
 		var customerRepository = new CustomerRepository(context);
@@ -70,7 +70,7 @@ public class CustomerService_Tests
 	}
 
 	[Fact]
-	public void GetAllCustomers_ShouldReturnEmptyListOfCutsomers_IfNoCustomersInDb()
+	public void GetAllCustomers_ShouldReturnEmptyListOfCustomers_IfNoCustomersInDb()
 	{
 		// Arrange
 		var customerRepository = new CustomerRepository(context);

@@ -25,6 +25,7 @@ public class MenuService(BookService bookService, CustomerService customerServic
 			{
 				case 1: HandleCustomersMenu(); break;
 				case 2: HandleBooksMenu(); break;
+				case 3: HandleLoansMenu(); break;
 			}
 		} while (response != 9);
 	}
@@ -49,7 +50,6 @@ public class MenuService(BookService bookService, CustomerService customerServic
 			}
 		} while (response != 9);
 	}
-
 	private void HandleBooksMenu()
 	{
 		int response;
@@ -71,6 +71,29 @@ public class MenuService(BookService bookService, CustomerService customerServic
 			}
 		} while (response != 9);
 	}
+
+	private void HandleLoansMenu()
+	{
+		int response;
+		do
+		{
+			Console.Clear();
+			Console.WriteLine("BIBLIOTEKSDATABAS\n\n");
+			Console.WriteLine("Hantera lån\n===========");
+			Console.WriteLine("1. Låna bok\n2. Återlämna bok\n3. Visa alla lån\n9. Gå till huvudmenyn");
+			Console.Write("Val: ");
+			int.TryParse(Console.ReadLine()!, out response);
+			switch (response)
+			{
+				case 1: AddLoanUi(); break;
+				case 2: DeleteLoanUi(); break;
+				case 3: GetAllLoansUi(); break;
+			}
+		} while (response != 9);
+	}
+
+
+
 	private void AddBookUi()
 	{
 		Console.Clear();
@@ -210,7 +233,6 @@ public class MenuService(BookService bookService, CustomerService customerServic
 		}
 		GetKey();
 	}
-
 	private void DeleteBookUi()
 	{
 		Console.Clear();
@@ -230,7 +252,11 @@ public class MenuService(BookService bookService, CustomerService customerServic
 			Console.Write($"Bekräfta borttagning av bok {bookId} [{book.Author.LastName}, {book.Author.FirstName} -  {book.Title}] (y/n): ");
 			var response = Console.ReadLine();
 			if (response != "y")
+			{
+				Console.WriteLine("Åtgärden avbruten");
+				GetKey();
 				return;
+			}
 
 			var result = _bookService.DeleteBook(bookId);
 			Console.Clear();
@@ -246,15 +272,6 @@ public class MenuService(BookService bookService, CustomerService customerServic
 
 		GetKey();
 	}
-
-	
-
-	
-
-	
-
-
-
 	private void GetKey()
 	{
 		Console.Write("Tryck någon tangent för att fortsätta . . .");
@@ -344,7 +361,6 @@ public class MenuService(BookService bookService, CustomerService customerServic
 		}
 		GetKey();
 	}
-	
 	private void UpdateCustomerUi()
 	{
 		try
@@ -408,7 +424,11 @@ public class MenuService(BookService bookService, CustomerService customerServic
 			Console.Write($"Bekräfta borttagning av kund {customerId} {customer.FirstName} {customer.LastName} (y/n): ");
 			var response = Console.ReadLine();
 			if (response != "y")
+			{
+				Console.WriteLine("Åtgärden avbruten");
+				GetKey();
 				return;
+			}
 
 			var result = _customerService.DeleteCustomer(customerId);
 			Console.Clear();
@@ -425,5 +445,53 @@ public class MenuService(BookService bookService, CustomerService customerServic
 		GetKey();
 
 
+	}
+	private void AddLoanUi()
+	{
+		Console.Clear();
+		Console.WriteLine("Låna bok \n=============");
+		try
+		{
+			Console.Write("Ange kundnummer: ");
+			int customerId = int.Parse(Console.ReadLine()!);
+			Console.Write("Ange boknummer: ");
+			int bookId = int.Parse(Console.ReadLine()!);
+			var customer = _customerService.GetCustomer(customerId);
+			var book = _bookService.GetBook(bookId);
+			Console.Clear();
+			if (customer == null)
+			{
+				Console.WriteLine("Kunden hittades inte");
+				GetKey();
+				return;
+			}
+			if (book == null)
+			{
+				Console.WriteLine("Boken hittades inte");
+				GetKey();
+				return;
+			}
+			if (book.Loan != null)
+			{
+				Console.WriteLine($"Boken är redan utlånad till kundnummer {book.Loan.CustomerId} [{book.Loan.Customer.FirstName} {book.Loan.Customer.LastName}]");
+				GetKey();
+				return;
+			}
+			var result = _loanService.CreateLoan(bookId, customerId);
+			Console.Clear();
+			if (result != null) Console.WriteLine($"Lyckades. {result.Customer.FirstName} {result.Customer.LastName} har lånat {result.Book.Title}.");
+			else Console.WriteLine("Något gick tyvärr fel. Kontrollera att boken är ledig.");
+		}
+		catch (Exception ex){ Console.WriteLine($"Något gick fel. Felkod {ex}: {ex.Message}"); }
+		GetKey();
+		
+	}
+	private void DeleteLoanUi()
+	{
+		throw new NotImplementedException();
+	}
+	private void GetAllLoansUi()
+	{
+		throw new NotImplementedException();
 	}
 }

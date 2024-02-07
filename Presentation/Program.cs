@@ -21,6 +21,7 @@ var builder = Host.CreateDefaultBuilder().ConfigureServices(services =>
 	services.AddScoped<MenuService>();
 }).Build();
 
+builder.Start();
 var menuService = builder.Services.GetRequiredService<MenuService>();
 
 menuService.MainMenu();

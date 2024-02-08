@@ -4,11 +4,12 @@ using Infrastructure.Services;
 
 namespace Presentation.Services;
 
-public class MenuService(BookService bookService, CustomerService customerService, LoanService loanService)
+public class MenuService(BookService bookService, CustomerService customerService, LoanService loanService, ProductService productService)
 {
 	private readonly BookService _bookService = bookService;
 	private readonly CustomerService _customerService = customerService;
 	private readonly LoanService _loanService = loanService;
+	private readonly ProductService _productService = productService;
 
 	public void MainMenu()
 	{
@@ -26,6 +27,7 @@ public class MenuService(BookService bookService, CustomerService customerServic
 				case 1: HandleCustomersMenu(); break;
 				case 2: HandleBooksMenu(); break;
 				case 3: HandleLoansMenu(); break;
+				case 4: HandleProductsMenu(); break;
 			}
 		} while (response != 9);
 	}
@@ -92,7 +94,27 @@ public class MenuService(BookService bookService, CustomerService customerServic
 		} while (response != 9);
 	}
 
-
+	private void HandleProductsMenu()
+	{
+		int response;
+		do
+		{
+			Console.Clear();
+			Console.WriteLine("BIBLIOTEKSDATABAS\n\n");
+			Console.WriteLine("Hantera bibliotekskunder\n========================");
+			Console.WriteLine("1. Lägg till produkt\n2. Visa produkt\n3. Visa alla produkter\n4. Ta bort en produkt\n5. Uppdatera produkt\n9. Gå till huvudmenyn");
+			Console.Write("Val: ");
+			int.TryParse(Console.ReadLine()!, out response);
+			switch (response)
+			{
+				case 1: AddProductUi(); break;
+				case 2: GetProductUi(); break;
+				case 3: GetAllProductsUi(); break;
+				case 4: DeleteProductUi(); break;
+				case 5: UpdateProductUi(); break;
+			}
+		} while (response != 9);
+	}
 
 	private void AddBookUi()
 	{
@@ -103,7 +125,7 @@ public class MenuService(BookService bookService, CustomerService customerServic
 		string title = Console.ReadLine()!;
 		Console.Write("Ange författares förnamn: ");
 		string authorFirstName = Console.ReadLine()!;
-		Console.Write("Ange författares förnamn: ");
+		Console.Write("Ange författares efternamn: ");
 		string authorLastName = Console.ReadLine()!; ;
 		Console.Write("Ange förlag: ");
 		string publisher = Console.ReadLine()!;
@@ -528,5 +550,93 @@ public class MenuService(BookService bookService, CustomerService customerServic
 			Console.WriteLine($"Något gick fel. Felkod {ex}: {ex.Message}");
 		}
 		GetKey();
+	}
+
+	private void AddProductUi()
+	{
+		Console.Clear();
+		Console.WriteLine("Lägg till produkt \n=================");
+
+		Console.Write("Ange produktnamn: ");
+		string title = Console.ReadLine()!;
+		Console.Write("Ange beskrivning: ");
+		string description = Console.ReadLine()!;
+		Console.Write("Ange kategori: ");
+		string category = Console.ReadLine()!; ;
+		Console.Write("Ange tillverkare: ");
+		string manufacturer = Console.ReadLine()!;
+		Console.Write("Ange pris: ");
+		decimal price = decimal.Parse(Console.ReadLine()!);
+
+		try
+		{
+			var result = _productService.CreateProduct(title, description, price, category, manufacturer);
+			Console.Clear();
+			if (result != null)
+				Console.WriteLine($"Produkten skapades. Produktens artikelnummer är {result.ArticleNumber}");
+			else
+				Console.WriteLine("Något gick fel.");
+		}
+		catch (Exception ex)
+		{
+			Console.WriteLine($"Något gick fel. Felkod {ex}: {ex.Message}");
+		}
+		GetKey();
+	}
+	private void GetProductUi()
+	{
+		Console.Clear();
+		Console.WriteLine("Visa produkt\n============");
+		Console.Write("Ange artikelnummer: ");
+
+		try
+		{
+			int articleNumber = int.Parse(Console.ReadLine()!);
+			var product = _productService.GetProduct(articleNumber);
+			Console.Clear();
+			if(product== null)
+			{
+				Console.WriteLine("Produkten hittades inte.");
+				GetKey();
+				return;
+			}
+			Console.WriteLine("Produkt\n=======");
+			Console.WriteLine($"Artikelnummer: {product.ArticleNumber}");
+			Console.WriteLine($"Produktnamn: {product.Title}");
+			Console.WriteLine($"Pris: {product.Price:0.00} kr");
+			Console.WriteLine($"Tillverkare: {product.Manufacturer.Name}");
+			Console.WriteLine($"Kategori: {product.Category.Name}");
+		}
+		catch (Exception ex)
+		{
+			Console.WriteLine($"Något gick fel. Felkod {ex}: {ex.Message}");
+		}
+		GetKey();
+	}
+	private void GetAllProductsUi()
+	{
+		try
+		{
+			var productList = _productService.GetAllProducts();
+			Console.Clear();
+			Console.WriteLine("Produktlista\n============");
+			foreach (var product in productList)
+			{
+				Console.WriteLine($"Artikelnummer {product.ArticleNumber} | {product.Title} ({product.Manufacturer.Name}) - {product.Price:0.00} kronor");
+			}
+		}
+		catch (Exception ex)
+		{
+			Console.WriteLine($"Något gick fel. Felkod {ex}: {ex.Message}");
+		}
+		GetKey();
+	}
+	private void UpdateProductUi()
+	{
+		throw new NotImplementedException();
+	}
+	private void DeleteProductUi()
+	{
+		throw new NotImplementedException();
 	}
 }

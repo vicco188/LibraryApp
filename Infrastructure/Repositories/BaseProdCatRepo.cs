@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 
 namespace Infrastructure.Repositories;
 
-internal class BaseProdCatRepo<TEntity> where TEntity : class
+public class BaseProdCatRepo<TEntity> where TEntity : class
 {
 	private readonly ProductDbContext _context;
 	protected BaseProdCatRepo(ProductDbContext context)

@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 
 namespace Infrastructure.Repositories;
 
-internal class ProductProdCatRepo(ProductDbContext context) : BaseProdCatRepo<Product>(context)
+public class ProductProdCatRepo(ProductDbContext context) : BaseProdCatRepo<Product>(context)
 {
 	private readonly ProductDbContext _context = context;
 
@@ -43,5 +43,7 @@ internal class ProductProdCatRepo(ProductDbContext context) : BaseProdCatRepo<Pr
 		}
 		return null!;
 	}
+
+
 
 }

@@ -715,6 +715,41 @@ public class MenuService(BookService bookService, CustomerService customerServic
 	}
 	private void DeleteProductUi()
 	{
-		throw new NotImplementedException();
+		Console.Clear();
+		Console.WriteLine("Ta bort produkt\n===============");
+		try
+		{
+			Console.Write("Ange artikelnummer: ");
+			int articleNumber = int.Parse(Console.ReadLine()!);
+			var product = _productService.GetProduct(articleNumber);
+			Console.Clear();
+			if (product == null)
+			{
+				Console.WriteLine("Produkten hittades inte.");
+				GetKey();
+				return;
+			}
+			Console.Write($"Bekräfta borttagning av produkt {articleNumber} {product.Title} (y/n): ");
+			var response = Console.ReadLine();
+			if (response != "y")
+			{
+				Console.WriteLine("Åtgärden avbruten");
+				GetKey();
+				return;
+			}
+
+			var result = _productService.DeleteProduct(articleNumber);
+			Console.Clear();
+			if (result != null)
+				Console.WriteLine("Produkten är borttagen");
+			else
+				Console.WriteLine("Något gick tyvärr fel.");
+		}
+		catch (Exception ex)
+		{
+			Console.WriteLine($"Något gick fel. Felkod {ex}: {ex.Message}");
+		}
+
+		GetKey();
 	}
 }

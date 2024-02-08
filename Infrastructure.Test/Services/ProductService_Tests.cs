@@ -118,4 +118,23 @@ public class ProductService_Tests
 		Assert.Equal("titletest2", product.Title);
 	}
 
+	[Fact]
+	public void DeleteProduct_ShouldDeleteProductThenReturnEntity_OrReturnNullIfProductDoesNotExist()
+	{
+		// Arrange
+		var categoryRepository = new CategoryProdCatRepo(context);
+		var manufacturerRepository = new ManufacturerProdCatRepo(context);
+		var productRepository = new ProductProdCatRepo(context);
+		var productService = new ProductService(productRepository, categoryRepository, manufacturerRepository);
+		productService.CreateProduct("titletest", "descriptiontest", 111, "categorytest", "manufacturertest");
+		// Act
+		var result1 = productService.DeleteProduct(1);
+		var result2 = productService.DeleteProduct(2);
+		var result3 = productService.GetAllProducts();
+		// Assert
+		Assert.Equal(1, result1.ArticleNumber);
+		Assert.Null(result2);
+		Assert.Empty(result3);
+	}
+
 }

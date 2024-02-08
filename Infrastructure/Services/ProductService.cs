@@ -73,6 +73,11 @@ public class ProductService(ProductProdCatRepo productRepository, CategoryProdCa
 
 	public Product DeleteProduct(int articleNumber)
 	{
+		try
+		{
+			return _productRepository.Delete(p => p.ArticleNumber == articleNumber);
+		}
+		catch (Exception ex) { Debug.Write("Error in method DeleteProduct : " + ex.Message); }
 		return null!;
 	}
 }

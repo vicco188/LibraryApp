@@ -18,6 +18,11 @@ var builder = Host.CreateDefaultBuilder().ConfigureServices(services =>
 	services.AddScoped<CustomerService>();
 	services.AddScoped<BookService>();
 	services.AddScoped<LoanService>();
+	services.AddDbContext<ProductDbContext>(x => x.UseSqlServer(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\EC\datalagring\Uppgift\LibraryApp\LibraryApp\Infrastructure\Data\ProductCatalog.mdf;Integrated Security=True;Connect Timeout=30"));
+	services.AddScoped<ProductProdCatRepo>();
+	services.AddScoped<CategoryProdCatRepo>();
+	services.AddScoped<ManufacturerProdCatRepo>();
+	services.AddScoped<ProductService>();
 	services.AddScoped<MenuService>();
 }).Build();
 

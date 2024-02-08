@@ -26,6 +26,7 @@ public class LoanRepository : BaseRepository<LoanEntity>
 		{
 			var entity = _context.Loans
 				.Include(e => e.Book)
+				.Include(e => e.Book.Author)
 				.Include(e => e.Customer)
 				.FirstOrDefault(expression);
 			if (entity != null)
@@ -48,6 +49,7 @@ public class LoanRepository : BaseRepository<LoanEntity>
 		{
 			return _context.Loans
 				.Include(e => e.Book)
+				.Include(e => e.Book.Author)
 				.Include(e => e.Customer)
 				.ToList();
 		}

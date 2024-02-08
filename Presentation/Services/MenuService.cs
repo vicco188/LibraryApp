@@ -519,7 +519,8 @@ public class MenuService(BookService bookService, CustomerService customerServic
 			Console.WriteLine("Lista över lån\n==============");
 			foreach (var loan in loanList)
 			{
-				Console.WriteLine($"Lånenummer {loan.LoanNumber} | Bok {loan.BookId} [{loan.Book.Author.LastName}, {loan.Book.Author.FirstName} - {loan.Book.Title}] är utlånad till kund {loan.CustomerId} [{loan.Customer.FirstName} {loan.Customer.LastName}]");
+				
+				Console.WriteLine($"Lånenummer {loan.LoanNumber} | Bok {loan.BookId} [{loan.Book.Author.ToString()} - {loan.Book.Title}] är utlånad till kund {loan.CustomerId} [{loan.Customer.FirstName} {loan.Customer.LastName}]");
 			}
 		}
 		catch (Exception ex)

@@ -646,7 +646,7 @@ public class MenuService(BookService bookService, CustomerService customerServic
 			Console.WriteLine("Produktlista\n============");
 			foreach (var product in productList)
 			{
-				Console.WriteLine($"Artikelnummer {product.ArticleNumber} | {product.Title} ({product.Manufacturer.Name}) - {product.Price:0.00} kronor");
+				Console.WriteLine($"Artikelnummer {product.ArticleNumber} | {product.Title} ({product.Manufacturer.Name}) - {product.Price:0.00} kronor i {product.Category.Name}");
 			}
 		}
 		catch (Exception ex)

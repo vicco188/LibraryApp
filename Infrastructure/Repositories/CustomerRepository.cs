@@ -14,7 +14,11 @@ public class CustomerRepository : BaseRepository<CustomerEntity>
 	{
 		_context = context;
 	}
-
+	/// <summary>
+	/// Gets a CustomerEntity from database that fits an lambda expression
+	/// </summary>
+	/// <param name="expression">The lambda expression that fits the customer</param>
+	/// <returns>A CustomerEntity if successful, otherwise null</returns>
 	public override CustomerEntity Read(Expression<Func<CustomerEntity, bool>> expression)
 	{
 		try
@@ -35,6 +39,10 @@ public class CustomerRepository : BaseRepository<CustomerEntity>
 		return null!;
 	}
 
+	/// <summary>
+	/// Gets all CustomerEntity entries from database
+	/// </summary>
+	/// <returns>An IEnumerable of all CustomerEntity in database</returns>
 	public override IEnumerable<CustomerEntity> ReadAll()
 	{
 		try

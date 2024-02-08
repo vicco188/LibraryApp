@@ -10,6 +10,15 @@ public class ProductService(ProductProdCatRepo productRepository, CategoryProdCa
 	private readonly CategoryProdCatRepo _categoryRepository = categoryRepository;
 	private readonly ManufacturerProdCatRepo _manufacturerRepository = manufacturerRepository;
 
+	/// <summary>
+	/// Creates a new product entry in database
+	/// </summary>
+	/// <param name="title">Title of the product</param>
+	/// <param name="description">Description of the product</param>
+	/// <param name="price">The price of the product</param>
+	/// <param name="category">The category of the product</param>
+	/// <param name="manufacturer">The mannufacturer of the product</param>
+	/// <returns>The Product entity that was entered into the database if successful, otherwise null</returns>
 	public Product CreateProduct(string title, string description, decimal price, string category, string manufacturer)
 	{
 		try
@@ -28,6 +37,11 @@ public class ProductService(ProductProdCatRepo productRepository, CategoryProdCa
 		return null!;
 	}
 
+	/// <summary>
+	/// Gets a product from the database
+	/// </summary>
+	/// <param name="articleNumber">The article number of the product to get</param>
+	/// <returns>The requested Product entry if successful, otherwise null</returns>
 	public Product GetProduct(int articleNumber)
 	{
 		try
@@ -38,6 +52,10 @@ public class ProductService(ProductProdCatRepo productRepository, CategoryProdCa
 		return null!;
 	}
 
+	/// <summary>
+	/// Gets all products entered in database
+	/// </summary>
+	/// <returns>An IEnumerable of all Product entities in database</returns>
 	public IEnumerable<Product> GetAllProducts()
 	{
 		try
@@ -48,6 +66,16 @@ public class ProductService(ProductProdCatRepo productRepository, CategoryProdCa
 		return null!;
 	}
 
+	/// <summary>
+	/// Updates a products information in database
+	/// </summary>
+	/// <param name="product">The Product entity to be updated</param>
+	/// <param name="title">The new title</param>
+	/// <param name="description">The new description</param>
+	/// <param name="price">The new price</param>
+	/// <param name="category">The new category name</param>
+	/// <param name="manufacturer">The new manufacturer name</param>
+	/// <returns>The updated Product entity that was enterd into database if successful, otherwise null</returns>
 	public Product UpdateProduct(Product product, string title, string? description, decimal price, string category, string manufacturer)
 	{
 		try
@@ -71,6 +99,11 @@ public class ProductService(ProductProdCatRepo productRepository, CategoryProdCa
 		return null!;
 	}
 
+	/// <summary>
+	/// Deletes a Product entry from database
+	/// </summary>
+	/// <param name="articleNumber">The article number of the product to delete</param>
+	/// <returns>The deleted Product entity if successful, otherwise null</returns>
 	public Product DeleteProduct(int articleNumber)
 	{
 		try

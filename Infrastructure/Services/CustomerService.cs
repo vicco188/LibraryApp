@@ -8,6 +8,11 @@ public class CustomerService(CustomerRepository customerRepository)
 {
 	private readonly CustomerRepository _customerRepository = customerRepository;
 
+	/// <summary>
+	/// Creates a new customer
+	/// </summary>
+	/// <param name="customer">A CustomerEntity containing customer information</param>
+	/// <returns>The CustomerEntity that was added in database if successful, otherwise null</returns>
 	public CustomerEntity CreateCustomer(CustomerEntity customer)
 	{
 		
@@ -23,6 +28,11 @@ public class CustomerService(CustomerRepository customerRepository)
 
 	}
 
+	/// <summary>
+	/// Gets customer by id
+	/// </summary>
+	/// <param name="customerId">Id of customer to get</param>
+	/// <returns>A CustomerEntity</returns>
 	public CustomerEntity GetCustomer(int customerId)
 	{
 		try
@@ -34,6 +44,10 @@ public class CustomerService(CustomerRepository customerRepository)
 
 	}
 
+	/// <summary>
+	/// Gets a list of all customers
+	/// </summary>
+	/// <returns>An IEnumerable with all CustomerEntity entries in database</returns>
 	public IEnumerable<CustomerEntity> GetAllCustomers() 
 	{
 		try
@@ -44,6 +58,11 @@ public class CustomerService(CustomerRepository customerRepository)
 		return null!;
 	}
 
+	/// <summary>
+	/// Deletes a customer from database
+	/// </summary>
+	/// <param name="customerId">The Id of the customer to delete</param>
+	/// <returns>The CustomerEntity that was deleted from database if successful, otherwise null</returns>
 	public CustomerEntity DeleteCustomer(int customerId)
 	{
 		try
@@ -54,6 +73,11 @@ public class CustomerService(CustomerRepository customerRepository)
 		return null!;
 	}
 
+	/// <summary>
+	/// Updates a customer in database
+	/// </summary>
+	/// <param name="customer">The customer entity to be updated (with modified fields)</param>
+	/// <returns>The updated CustomerEntity that was entered into the database if successful, otherwise null</returns>
 	public CustomerEntity UpdateCustomer(CustomerEntity customer)
 	{
 		try

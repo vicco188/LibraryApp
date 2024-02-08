@@ -8,6 +8,12 @@ public class LoanService(LoanRepository loanRepository)
 {
 	public readonly LoanRepository _loanRepository = loanRepository;
 
+	/// <summary>
+	/// Registers a LoanEntity (pair of customer and book)
+	/// </summary>
+	/// <param name="bookId">Id of book to loan</param>
+	/// <param name="customerId">Id of customer</param>
+	/// <returns>LoanEntity if successful, otherwise null</returns>
 	public LoanEntity CreateLoan(int bookId, int customerId)
 	{
 		try
@@ -20,6 +26,12 @@ public class LoanService(LoanRepository loanRepository)
 
 
 	}
+
+	/// <summary>
+	/// Deletes loan (returns book)
+	/// </summary>
+	/// <param name="bookId">Id of book to return</param>
+	/// <returns>Deleted loan entity if successful, otherwise null</returns>
 	public LoanEntity DeleteLoan(int bookId)
 	{
 		try
@@ -32,6 +44,11 @@ public class LoanService(LoanRepository loanRepository)
 
 	}
 
+	/// <summary>
+	/// Gets loan entity
+	/// </summary>
+	/// <param name="bookId">Id of book in loan</param>
+	/// <returns>LoanEntity if found, otherwise null</returns>
 	public LoanEntity GetLoan(int bookId)
 	{
 		try
@@ -42,6 +59,10 @@ public class LoanService(LoanRepository loanRepository)
 		return null!;
 	}
 
+	/// <summary>
+	/// Gets a list of loans
+	/// </summary>
+	/// <returns>An IEnumerable of all LoanEntity entries in database</returns>
 	public IEnumerable<LoanEntity> GetAllLoans()
 	{
 		try

@@ -13,6 +13,16 @@ public class BookService(AuthorRepository authorRepository, BookRepository bookR
 	private readonly LanguageRepository _languageRepository = languageRepository;
 	private readonly PublisherRepository _publisherRepository = publisherRepository;
 
+	/// <summary>
+	/// Creates a new Book entry into the database
+	/// </summary>
+	/// <param name="title">The book's title</param>
+	/// <param name="authorFirstName">The authors first name</param>
+	/// <param name="authorLastName">The authors last name</param>
+	/// <param name="publisher">The name of the book's publisher</param>
+	/// <param name="genre">The genre of the book</param>
+	/// <param name="language">The language of the book</param>
+	/// <returns>A BookEntity of the new entry</returns>
 	public BookEntity CreateBook(string title, string authorFirstName, string authorLastName, string publisher, string genre, string language)
 	{
 		try
@@ -56,6 +66,11 @@ public class BookService(AuthorRepository authorRepository, BookRepository bookR
 		return null!;
 	}
 
+	/// <summary>
+	/// Gets a book by Id
+	/// </summary>
+	/// <param name="bookId">The Id of the book to get</param>
+	/// <returns>The BookEntity requested if found, otherwise null</returns>
 	public BookEntity GetBook(int bookId)
 	{
 		try
@@ -66,6 +81,10 @@ public class BookService(AuthorRepository authorRepository, BookRepository bookR
 		return null!;
 	}
 
+	/// <summary>
+	/// Gets all book entries from database
+	/// </summary>
+	/// <returns>An IEnumerable of BookEntities of all entries in database</returns>
 	public IEnumerable<BookEntity> GetAllBooks()
 	{
 		try
@@ -76,6 +95,17 @@ public class BookService(AuthorRepository authorRepository, BookRepository bookR
 		return null!;
 	}
 
+	/// <summary>
+	/// Updates a book entry's information in database
+	/// </summary>
+	/// <param name="book">BookEntity corresponding to the entry to update</param>
+	/// <param name="title">New title</param>
+	/// <param name="authorFirstName">New author first name</param>
+	/// <param name="authorLastName">New author last name</param>
+	/// <param name="publisher">New publisher name</param>
+	/// <param name="genre">New genre</param>
+	/// <param name="language">New language</param>
+	/// <returns>A BookEntity correspoding to the new db entry if successful, otherwise null</returns>
 	public BookEntity UpdateBook(BookEntity book, string title, string authorFirstName, string authorLastName, string publisher, string genre, string language)
 	{
 		try
@@ -113,6 +143,11 @@ public class BookService(AuthorRepository authorRepository, BookRepository bookR
 		return null!;
 	}
 
+	/// <summary>
+	/// Deletes a book entry from database
+	/// </summary>
+	/// <param name="bookId">The Id of the book to delete</param>
+	/// <returns>A BookEntity from the deleted database entry if successful, otherwise null</returns>
 	public BookEntity DeleteBook(int bookId)
 	{
 		try

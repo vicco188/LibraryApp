@@ -98,4 +98,24 @@ public class ProductService_Tests
 		Assert.Empty(result);
 	}
 
+
+	[Fact]
+	public void UpdateProduct_ShouldUpdateInDb_AndReturnUpdatedProduct()
+	{
+		// Arrange
+		var categoryRepository = new CategoryProdCatRepo(context);
+		var manufacturerRepository = new ManufacturerProdCatRepo(context);
+		var productRepository = new ProductProdCatRepo(context);
+		var productService = new ProductService(productRepository, categoryRepository, manufacturerRepository);
+		productService.CreateProduct("titletest", "descriptiontest", 111, "categorytest", "manufacturertest");
+		var product = productService.GetProduct(1);
+		// Act
+		productService.UpdateProduct(product, "titletest2", "descriptiontest2", 222, "categorytest2", "manufacturertest");
+		var result = productService.GetProduct(1);
+		// Assert
+		Assert.Equal(1, product.ManufacturerId);
+		Assert.Equal(2, product.CategoryId);
+		Assert.Equal("titletest2", product.Title);
+	}
+
 }

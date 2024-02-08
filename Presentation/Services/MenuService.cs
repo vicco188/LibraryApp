@@ -1,6 +1,7 @@
 ﻿using Azure;
 using Infrastructure.Entities;
 using Infrastructure.Services;
+using Microsoft.Extensions.Primitives;
 
 namespace Presentation.Services;
 
@@ -223,18 +224,33 @@ public class MenuService(BookService bookService, CustomerService customerServic
 				GetKey();
 				return;
 			}
-			Console.Write($"Ange title (befintlig titel: {bookEntity.Title}): ");
+			Console.WriteLine("Uppdatera bokuppgifter\n=======================");
+			Console.WriteLine("Om ett fält lämnas blankt så kommer befintligt värde att behållas.");
+			Console.Write($"Ange titel (befintlig titel: {bookEntity.Title}): ");
 			var title = Console.ReadLine()!;
+			if (string.IsNullOrEmpty(title)) title = bookEntity.Title;
+
 			Console.Write($"Ange författares förnamn (befintligt förnamn: {bookEntity.Author.FirstName}): ");
 			var firstName = Console.ReadLine()!;
+			if (string.IsNullOrEmpty(firstName)) firstName = bookEntity.Author.FirstName;
+
 			Console.Write($"Ange författares efternamn (befintligt efternamn: {bookEntity.Author.LastName}): ");
 			var lastName = Console.ReadLine()!;
+			if (string.IsNullOrEmpty(lastName)) lastName = bookEntity.Author.LastName;
+
 			Console.Write($"Ange kategori (befintlig kategori: {bookEntity.Genre.Name}): ");
 			var genre = Console.ReadLine()!;
+			if (string.IsNullOrEmpty(genre)) genre = bookEntity.Genre.Name;
+
 			Console.Write($"Ange förlag (befintligt förlag: {bookEntity.Publisher.Name}): ");
 			var publisher = Console.ReadLine()!;
+			if (string.IsNullOrEmpty(publisher)) publisher = bookEntity.Publisher.Name;
+
 			Console.Write($"Ange språk (befintligt språk: {bookEntity.Language.Name}): ");
 			var language = Console.ReadLine()!;
+			if (string.IsNullOrEmpty(language)) language = bookEntity.Language.Name;
+
+
 			Console.Write("Bekräfta uppdatering (y/n): ");
 			var response = Console.ReadLine();
 			if (response != "y")
@@ -399,12 +415,20 @@ public class MenuService(BookService bookService, CustomerService customerServic
 				GetKey();
 				return;
 			}
+			Console.WriteLine("Uppdatera kunduppgifter\n========================");
+			Console.WriteLine("Om ett fält lämnas blankt så kommer befintligt värde att behållas.");
 			Console.Write($"Ange förnamn (befintligt förnamn: {customerEntity.FirstName}): ");
 			var firstName = Console.ReadLine()!;
+			if (string.IsNullOrEmpty(firstName)) firstName = customerEntity.FirstName;
+
 			Console.Write($"Ange efternamn (befintligt efternamn: {customerEntity.LastName}): ");
 			var lastName = Console.ReadLine()!;
+			if (string.IsNullOrEmpty(lastName)) lastName = customerEntity.LastName;
+
 			Console.Write($"Ange e-post (befintlig e-post: {customerEntity.Email}): ");
 			var email = Console.ReadLine()!;
+			if (string.IsNullOrEmpty(email)) email = customerEntity.Email;
+
 			Console.Write("Bekräfta uppdatering (y/n): ");
 			var response = Console.ReadLine();
 			if (response != "y")
@@ -633,7 +657,61 @@ public class MenuService(BookService bookService, CustomerService customerServic
 	}
 	private void UpdateProductUi()
 	{
-		throw new NotImplementedException();
+		try
+		{
+			Console.Clear();
+			Console.WriteLine("Uppdatera produktuppgifter\n===========================");
+			Console.Write("Ange artikelnummer att uppdatera: ");
+			int articleNumber = int.Parse(Console.ReadLine()!);
+			var productEntity = _productService.GetProduct(articleNumber);
+			Console.Clear();
+			if (productEntity == null)
+			{
+				Console.WriteLine("Produkten hittades inte");
+				GetKey();
+				return;
+			}
+			Console.WriteLine("Uppdatera produktuppgifter\n===========================");
+			Console.WriteLine("Om ett fält lämnas blankt så kommer befintligt värde att behållas.");
+			Console.Write($"Ange produktnamn (befintligt produktnamn: {productEntity.Title}): ");
+			var title = Console.ReadLine()!;
+			if (string.IsNullOrEmpty(title)) title = productEntity.Title;
+
+			Console.Write($"Ange beskrivning (befintlig beskrivning: {productEntity.Description}): ");
+			var description = Console.ReadLine()!;
+			if (string.IsNullOrEmpty(description)) description = productEntity.Description;
+
+			Console.Write($"Ange pris (befintligt pris: {productEntity.Price:0.00}): ");
+			if (!decimal.TryParse(Console.ReadLine(), out decimal price)) price = productEntity.Price;
+			
+			
+			Console.Write($"Ange kategori (befintlig kategori: {productEntity.Category.Name}): ");
+			var category = Console.ReadLine()!;
+			if (string.IsNullOrEmpty(category)) category = productEntity.Category.Name;
+
+			Console.Write($"Ange tillverkare (befintlig tillverkare: {productEntity.Manufacturer.Name}): ");
+			var manufacturer = Console.ReadLine()!;
+			if(string.IsNullOrEmpty(manufacturer)) manufacturer = productEntity.Manufacturer.Name;
+
+			Console.Write("Bekräfta uppdatering (y/n): ");
+			var response = Console.ReadLine();
+			if (response != "y")
+			{
+				Console.WriteLine("Åtgärden avbruten");
+				GetKey();
+				return;
+			}
+
+			var result = _productService.UpdateProduct(productEntity, title, description, price, category, manufacturer);
+			Console.Clear();
+			if (result != null) Console.WriteLine("Produkten uppdaterades");
+			else Console.WriteLine("Något gick tyvärr fel");
+		}
+		catch (Exception ex)
+		{
+			Console.WriteLine($"Något gick fel. Felkod {ex}: {ex.Message}");
+		}
+		GetKey();
 	}
 	private void DeleteProductUi()
 	{

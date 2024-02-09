@@ -113,4 +113,14 @@ public class ProductService(ProductProdCatRepo productRepository, CategoryProdCa
 		catch (Exception ex) { Debug.Write("Error in method DeleteProduct : " + ex.Message); }
 		return null!;
 	}
+
+	public Category ViewCategory(string categoryName)
+	{
+		try
+		{
+			return _categoryRepository.Read(c => c.Name.ToLower() == categoryName.ToLower());
+		}
+		catch (Exception ex) { Debug.Write("Error in method ViewCategory : " + ex.Message); }
+		return null!;
+	}
 }

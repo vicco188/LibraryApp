@@ -103,7 +103,7 @@ public class MenuService(BookService bookService, CustomerService customerServic
 			Console.Clear();
 			Console.WriteLine("BIBLIOTEKSDATABAS\n\n");
 			Console.WriteLine("Hantera bibliotekskunder\n========================");
-			Console.WriteLine("1. Lägg till produkt\n2. Visa produkt\n3. Visa alla produkter\n4. Ta bort en produkt\n5. Uppdatera produkt\n9. Gå till huvudmenyn");
+			Console.WriteLine("1. Lägg till produkt\n2. Visa produkt\n3. Visa alla produkter\n4. Ta bort en produkt\n5. Uppdatera produkt\n6. Visa kategori\n9. Gå till huvudmenyn");
 			Console.Write("Val: ");
 			int.TryParse(Console.ReadLine()!, out response);
 			switch (response)
@@ -113,6 +113,7 @@ public class MenuService(BookService bookService, CustomerService customerServic
 				case 3: GetAllProductsUi(); break;
 				case 4: DeleteProductUi(); break;
 				case 5: UpdateProductUi(); break;
+				case 6: ViewCategoryUi(); break;
 			}
 		} while (response != 9);
 	}
@@ -749,6 +750,33 @@ public class MenuService(BookService bookService, CustomerService customerServic
 		{
 			Console.WriteLine($"Något gick fel. Felkod {ex}: {ex.Message}");
 		}
+
+		GetKey();
+	}
+
+	public void ViewCategoryUi()
+	{
+		Console.Clear();
+		Console.WriteLine("Visa kategori\n=============");
+		Console.WriteLine("Ange kategorinamn: ");
+		var categoryName = Console.ReadLine();
+		var category = _productService.ViewCategory(categoryName!);
+		Console.Clear();
+		if (category == null)
+		{
+			Console.WriteLine("Kategorin hittades inte.");
+			GetKey();
+			return;
+		}
+		Console.WriteLine(category.Name);
+		Console.WriteLine(new string('=', category.Name.Length));
+		foreach(var product in category.Products)
+		{
+			Console.WriteLine($"Artikelnummer {product.ArticleNumber} | {product.Title} ({product.Manufacturer.Name}) - {product.Price:0.00} kronor");
+		}
+
+
+
 
 		GetKey();
 	}

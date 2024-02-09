@@ -153,4 +153,21 @@ public class ProductService_Tests
 		Assert.Equal("Categorytest", result1.Name);
 		Assert.Null(result2);
 	}
+
+	[Fact]
+	public void ViewManufacturer_ShouldReturnManufacturerIfManufacturerWithSameNameExists_OtherwiseReturnNull()
+	{
+		// Arrange
+		var categoryRepository = new CategoryProdCatRepo(context);
+		var manufacturerRepository = new ManufacturerProdCatRepo(context);
+		var productRepository = new ProductProdCatRepo(context);
+		var productService = new ProductService(productRepository, categoryRepository, manufacturerRepository);
+		productService.CreateProduct("titletest", "descriptiontest", 111, "Categorytest", "Manufacturertest");
+		// Act
+		var result1 = productService.ViewManufacturer("mAnUfAcTuReRtEsT");
+		var result2 = productService.ViewManufacturer("IDontExist");
+		// Assert
+		Assert.Equal("Manufacturertest", result1.Name);
+		Assert.Null(result2);
+	}
 }

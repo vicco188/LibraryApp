@@ -10,6 +10,11 @@ public class CategoryProdCatRepo(ProductDbContext context) : BaseProdCatRepo<Cat
 {
 	private readonly ProductDbContext _context = context;
 
+	/// <summary>
+	/// Gets a category from database that fits a lambda expression
+	/// </summary>
+	/// <param name="expression">The lambda expression that corresponds to the desired category</param>
+	/// <returns>A Category entity if successful, otherwise null</returns>
 	public override Category Read(Expression<Func<Category, bool>> expression)
 	{
 		try

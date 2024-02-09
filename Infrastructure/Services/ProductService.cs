@@ -114,11 +114,31 @@ public class ProductService(ProductProdCatRepo productRepository, CategoryProdCa
 		return null!;
 	}
 
+	/// <summary>
+	/// Gets a Category entity from database by name
+	/// </summary>
+	/// <param name="categoryName">The name of the category to fetch</param>
+	/// <returns>A Category entity with the matching name if successful, otherwise null</returns>
 	public Category ViewCategory(string categoryName)
 	{
 		try
 		{
 			return _categoryRepository.Read(c => c.Name.ToLower() == categoryName.ToLower());
+		}
+		catch (Exception ex) { Debug.Write("Error in method ViewCategory : " + ex.Message); }
+		return null!;
+	}
+
+	/// <summary>
+	/// Gets a Manufacturer entity from database by name
+	/// </summary>
+	/// <param name="manufactruerName">The name of the manufacturer to fetch</param>
+	/// <returns>A Manufacturer entity with the matching name if successful, otherwise null</returns>
+	public Manufacturer ViewManufacturer(string manufacturerName)
+	{
+		try
+		{
+			return _manufacturerRepository.Read(m => m.Name.ToLower() == manufacturerName.ToLower());
 		}
 		catch (Exception ex) { Debug.Write("Error in method ViewCategory : " + ex.Message); }
 		return null!;

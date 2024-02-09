@@ -103,7 +103,7 @@ public class MenuService(BookService bookService, CustomerService customerServic
 			Console.Clear();
 			Console.WriteLine("BIBLIOTEKSDATABAS\n\n");
 			Console.WriteLine("Hantera bibliotekskunder\n========================");
-			Console.WriteLine("1. Lägg till produkt\n2. Visa produkt\n3. Visa alla produkter\n4. Ta bort en produkt\n5. Uppdatera produkt\n6. Visa kategori\n9. Gå till huvudmenyn");
+			Console.WriteLine("1. Lägg till produkt\n2. Visa produkt\n3. Visa alla produkter\n4. Ta bort en produkt\n5. Uppdatera produkt\n6. Visa kategori\n7. Visa tillverkare\n9. Gå till huvudmenyn");
 			Console.Write("Val: ");
 			int.TryParse(Console.ReadLine()!, out response);
 			switch (response)
@@ -114,6 +114,7 @@ public class MenuService(BookService bookService, CustomerService customerServic
 				case 4: DeleteProductUi(); break;
 				case 5: UpdateProductUi(); break;
 				case 6: ViewCategoryUi(); break;
+				case 7: ViewManufacturerUi(); break;
 			}
 		} while (response != 9);
 	}
@@ -758,7 +759,7 @@ public class MenuService(BookService bookService, CustomerService customerServic
 	{
 		Console.Clear();
 		Console.WriteLine("Visa kategori\n=============");
-		Console.WriteLine("Ange kategorinamn: ");
+		Console.Write("Ange kategorinamn: ");
 		var categoryName = Console.ReadLine();
 		var category = _productService.ViewCategory(categoryName!);
 		Console.Clear();
@@ -774,10 +775,29 @@ public class MenuService(BookService bookService, CustomerService customerServic
 		{
 			Console.WriteLine($"Artikelnummer {product.ArticleNumber} | {product.Title} ({product.Manufacturer.Name}) - {product.Price:0.00} kronor");
 		}
+		GetKey();
+	}
 
-
-
-
+	public void ViewManufacturerUi()
+	{
+		Console.Clear();
+		Console.WriteLine("Visa tillverkare\n=============");
+		Console.Write("Ange tillverkare: ");
+		var manufacturerName = Console.ReadLine();
+		var manufacturer = _productService.ViewManufacturer(manufacturerName!);
+		Console.Clear();
+		if (manufacturer == null)
+		{
+			Console.WriteLine("Tillverkaren hittades inte.");
+			GetKey();
+			return;
+		}
+		Console.WriteLine(manufacturer.Name);
+		Console.WriteLine(new string('=', manufacturer.Name.Length));
+		foreach (var product in manufacturer.Products)
+		{
+			Console.WriteLine($"Artikelnummer {product.ArticleNumber} | {product.Title} - {product.Price:0.00} kronor i {product.Category.Name}");
+		}
 		GetKey();
 	}
 }
